@@ -1,5 +1,7 @@
 # Seed Loot Finder — Forge 1.12.2
 
+this was made by codex - [i didnt code this myself but based it on this repo](https://github.com/hube12/MinecraftSeedCrackingC)
+
 A small client-only loot finder for vanilla-compatible Minecraft Java **1.12.2** worlds. It
 does not crack seeds, locate unrelated structures, track players, or add any server commands.
 For multiplayer prediction, you enter the world's seed yourself.
