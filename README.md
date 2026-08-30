@@ -9,7 +9,7 @@ For multiplayer prediction, you enter the world's seed yourself.
 ## Install
 
 Install Forge **14.23.5.2859** for Minecraft 1.12.2, then place
-`seed-loot-finder-1.12.2-1.0.1.jar` in the instance's `mods` folder. The server needs nothing.
+`seed-loot-finder-1.12.2-1.0.2.jar` in the instance's `mods` folder. The server needs nothing.
 
 ## Use
 
@@ -44,7 +44,9 @@ Other controls:
 ```
 
 The default targets are an enchanted golden apple and a Mending book. The on-screen list shows
-coordinates and every requested match found in each container.
+coordinates and every requested match found in each container. Nearby matches also have a gold
+beacon beam drawn through terrain; a waypoint is removed permanently for the current session
+once you come within five blocks of its chest.
 
 ## Accuracy model
 
@@ -92,4 +94,4 @@ $env:JAVA_HOME = 'C:\Path\To\JDK8'
 .\gradlew.bat clean build
 ```
 
-The output is `build\libs\seed-loot-finder-1.12.2-1.0.1.jar`.
+The output is `build\libs\seed-loot-finder-1.12.2-1.0.2.jar`.

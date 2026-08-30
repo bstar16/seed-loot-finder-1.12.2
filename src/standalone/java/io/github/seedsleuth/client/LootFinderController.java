@@ -17,11 +17,15 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public final class LootFinderController {
     private final LootScanner scanner = new LootScanner();
     private final SimulatedLootRadar radar = new SimulatedLootRadar();
+    private final LootBeaconRenderer beaconRenderer = new LootBeaconRenderer(this);
     private Long seed;
     private int radius = 3;
+    /** A matching chest has served its purpose once the player is within this distance. */
+    private static final double WAYPOINT_CLEAR_RANGE = 5.0D;
 
     public void register() {
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(beaconRenderer);
         ClientCommandHandler.instance.registerCommand(new LootFinderCommand(this));
     }
 
@@ -48,22 +52,22 @@ public final class LootFinderController {
         if (mc.player == null || mc.world == null) return;
         if (LootScanner.canScan(mc)) {
             scanner.tick(mc); // Integrated server: read the actual stored table/seed.
-            return;
-        }
-        if (seed == null) {
+        } else if (seed == null) {
             scanner.setLastError("Enter the world's seed first: /lootfinder seed <seed>");
-            return;
-        }
-        if (mc.player.dimension != 0 && mc.player.dimension != 1) {
+        } else if (mc.player.dimension != 0 && mc.player.dimension != 1) {
             scanner.setLastError("Prediction currently supports the Overworld and the End only.");
-            return;
+        } else {
+            WorldType type = mc.world.getWorldType();
+            String options = mc.world.getWorldInfo().getGeneratorOptions();
+            radar.configure(seed.longValue(), type, options, mc.player.dimension);
+            radar.enqueueAround(((int)Math.floor(mc.player.posX)) >> 4,
+                ((int)Math.floor(mc.player.posZ)) >> 4, radius);
+            radar.tick(mc, scanner);
         }
-        WorldType type = mc.world.getWorldType();
-        String options = mc.world.getWorldInfo().getGeneratorOptions();
-        radar.configure(seed.longValue(), type, options, mc.player.dimension);
-        radar.enqueueAround(((int)Math.floor(mc.player.posX)) >> 4,
-            ((int)Math.floor(mc.player.posZ)) >> 4, radius);
-        radar.tick(mc, scanner);
+        // This also adds the coordinate to LootScanner's dismissed set, so it stays gone when
+        // the player walks away or the finder rescans loaded chunks.
+        scanner.clearWithin(mc.player.dimension, mc.player.posX, mc.player.posY, mc.player.posZ,
+            WAYPOINT_CLEAR_RANGE);
     }
 
     @SubscribeEvent

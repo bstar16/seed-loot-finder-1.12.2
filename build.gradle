@@ -7,7 +7,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-version = '1.0.1'
+version = '1.0.2'
 group = 'io.github.seedsleuth'
 archivesBaseName = 'seed-loot-finder-1.12.2'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
