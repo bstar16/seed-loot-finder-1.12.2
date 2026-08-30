@@ -1,0 +1,35 @@
+buildscript {
+    repositories { maven { url = 'https://maven.minecraftforge.net/' }; mavenCentral() }
+    dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:3.0.197' }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+version = '1.0.1'
+group = 'io.github.seedsleuth'
+archivesBaseName = 'seed-loot-finder-1.12.2'
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+sourceSets { main { java { srcDirs = ['src/standalone/java'] } } }
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+    runs { client { workingDirectory project.file('run'); property 'forge.logging.console.level', 'info' } }
+}
+
+repositories { mavenCentral() }
+dependencies { minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'; testCompile 'junit:junit:4.13.2' }
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', '1.12.2'
+    from(sourceSets.main.resources.srcDirs) { include 'mcmod.info'; expand 'version': project.version, 'mcversion': '1.12.2' }
+    from(sourceSets.main.resources.srcDirs) { exclude 'mcmod.info' }
+}
+
+jar {
+    manifest { attributes('Specification-Title': 'Seed Loot Finder', 'Specification-Vendor': 'Seed Loot Finder contributors', 'Specification-Version': '1', 'Implementation-Title': project.name, 'Implementation-Version': project.version, 'Implementation-Vendor': 'Seed Loot Finder contributors') }
+}
+jar.finalizedBy('reobfJar')

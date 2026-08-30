@@ -1,0 +1,3 @@
+[
+  { "modid": "seedlootfinder", "name": "Seed Loot Finder", "description": "Standalone seed-input loot finder for vanilla-compatible Minecraft 1.12.2 worlds.", "version": "${version}", "mcversion": "${mcversion}", "authorList": ["Seed Loot Finder contributors"] }
+]
